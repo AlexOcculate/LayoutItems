@@ -1,5 +1,7 @@
 ﻿using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
+using DevExpress.XtraGrid;
+using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraLayout;
 using System;
 using System.Collections;
@@ -54,6 +56,7 @@ namespace LayoutItemsForm
                   createConnectionStringLayoutControlItem( lg1 );
                   createLoginIDLayoutControlItem( lg1 );
                   createPasswordLayoutControlItem( lg1 );
+                  createConnectionPropertiesLayoutControlItem( lg1 );
                }
                LayoutControlGroup lg2 = tg.AddTabPage( "Provider" ) as LayoutControlGroup;
                {
@@ -227,6 +230,21 @@ namespace LayoutItemsForm
          lci.Name = "lciConnectionString";
          lci.Text = "Connection String";
          lci.Control = new TextEdit( );
+         return lci;
+      }
+
+      private static LayoutControlItem createConnectionPropertiesLayoutControlItem( LayoutControlGroup lg )
+      {
+         LayoutControlItem lci = lg.AddItem( );
+         lci.Name = "lciConnectionProperties";
+         lci.Text = "Connection Properties";
+         lci.TextLocation = DevExpress.Utils.Locations.Top;
+         GridControl gc = new GridControl( );
+         lci.Control = gc;
+         gc.ForceInitialize( );
+         GridView gv = gc.MainView as GridView;
+         gv.NewItemRowText = "New Row";
+         gv.OptionsView.
          return lci;
       }
 
