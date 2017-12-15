@@ -1,12 +1,8 @@
 ﻿using DevExpress.XtraEditors;
+using DevExpress.XtraEditors.Controls;
 using DevExpress.XtraLayout;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Collections;
 using System.Windows.Forms;
 
 namespace LayoutItemsForm
@@ -16,8 +12,225 @@ namespace LayoutItemsForm
       public Form1()
       {
          InitializeComponent( );
-         this.f( );
+         this.create( );
+         //this.f( );
       }
+
+      private void create()
+      {
+         ((System.ComponentModel.ISupportInitialize) (this.layoutControl1)).BeginInit( );
+         ((System.ComponentModel.ISupportInitialize) (this.layoutControlGroup1)).BeginInit( );
+         this.SuspendLayout( );
+         {
+            this.createLayoutControl( );
+         }
+         ((System.ComponentModel.ISupportInitialize) (this.layoutControl1)).EndInit( );
+         ((System.ComponentModel.ISupportInitialize) (this.layoutControlGroup1)).EndInit( );
+         this.ResumeLayout( false );
+         this.PerformLayout( );
+      }
+
+      private void createLayoutControl()
+      {
+         LayoutControl lc = this.layoutControl1; // new LayoutControl( );
+         LayoutControlGroup rg = Form1.configRootGroup( lc, "DataStore Connection" );
+         {
+            lc.Dock = System.Windows.Forms.DockStyle.Fill;
+
+            LayoutControlItem item1 = rg.AddItem( );
+            {
+               item1.Name = "lciName";
+               item1.Text = "Name";
+               Control textBox1 = item1.Control = new TextEdit( );
+               {
+                  textBox1.Name = "TextBox1";
+               }
+            }
+            TabbedControlGroup tg = rg.AddTabbedGroup( );
+            {
+               tg.Name = "tgg";
+               LayoutControlGroup lg1 = tg.AddTabPage( "Connection" ) as LayoutControlGroup;
+               {
+                  createConnectionStringLayoutControlItem( lg1 );
+                  createLoginIDLayoutControlItem( lg1 );
+                  createPasswordLayoutControlItem( lg1 );
+               }
+               LayoutControlGroup lg2 = tg.AddTabPage( "Provider" ) as LayoutControlGroup;
+               {
+                  createSyntaxProviderLayoutControlItem( lg2 );
+                  createMetadataProviderLayoutControlItem( lg2 );
+               }
+               LayoutControlGroup lg3 = tg.AddTabPage( "Preview" ) as LayoutControlGroup;
+               {
+                  createSuperToolTipHeaderLayoutControlItem( lg3 );
+                  createSuperToolTipContentLayoutControlItems( lg3 );
+                  createSuperToolTipFooterLayoutControlItem( lg3 );
+               }
+               LayoutControlGroup lg4 = tg.AddTabPage( "Description" ) as LayoutControlGroup;
+               {
+                  createDescriptionLayoutControlItem( lg4 );
+               }
+               tg.SelectedTabPage = lg1;
+            }
+         }
+      }
+
+      private sealed class SyntaxProviderType
+      {
+         private readonly string name;
+         private readonly int value;
+         public static readonly SyntaxProviderType AUTO = new SyntaxProviderType( 0, "auto" );
+         public static readonly SyntaxProviderType GENERIC = new SyntaxProviderType( 1, "generic" );
+         public static readonly SyntaxProviderType ANSI_SQL_2003 = new SyntaxProviderType( 2, "ansi_sql_2003" );
+         public static readonly SyntaxProviderType ANSI_SQL_92 = new SyntaxProviderType( 3, "ansi_sql_92" );
+         public static readonly SyntaxProviderType ANSI_SQL_89 = new SyntaxProviderType( 4, "ansi_sql_89" );
+         public static readonly SyntaxProviderType[ ] ToArray = new SyntaxProviderType[ ]  {
+            AUTO, GENERIC, ANSI_SQL_2003, ANSI_SQL_92, ANSI_SQL_89
+         };
+
+         private SyntaxProviderType( int value, string name )
+         {
+            this.value = value;
+            this.name = name;
+         }
+         public override string ToString()
+         {
+            return System.Globalization.CultureInfo.CurrentUICulture.TextInfo.ToTitleCase( this.name );
+         }
+      };
+      private LayoutControlItem createSyntaxProviderLayoutControlItem( LayoutControlGroup lg )
+      {
+         LayoutControlItem lci = lg.AddItem( );
+         lci.Name = "lciMetadataProvider";
+         lci.Text = "Metadata Provider";
+         ComboBoxEdit o = (ComboBoxEdit) (lci.Control = new ComboBoxEdit( ));
+         {
+            ComboBoxItemCollection coll = o.Properties.Items;
+            coll.BeginUpdate( );
+            try
+            {
+               coll.AddRange( SyntaxProviderType.ToArray );
+               o.SelectedIndex = 0;
+            }
+            finally
+            {
+               coll.EndUpdate( );
+            }
+         }
+         return lci;
+      }
+      private enum MetadataProviderEnum
+      {
+         Auto = 0, Generic, MSSQL_Server
+      };
+      private LayoutControlItem createMetadataProviderLayoutControlItem( LayoutControlGroup lg )
+      {
+         LayoutControlItem lci = lg.AddItem( );
+         lci.Name = "lciMetadataProvider";
+         lci.Text = "Metadata Provider";
+         ComboBoxEdit o = (ComboBoxEdit) (lci.Control = new ComboBoxEdit( ));
+         {
+            ComboBoxItemCollection coll = o.Properties.Items;
+            coll.BeginUpdate( );
+            try
+            {
+               string[ ] name = Enum.GetNames( typeof( MetadataProviderEnum ) );
+               for( int i = 0; i < name.Length; i++ )
+               {
+                  string tc = System.Globalization.CultureInfo.CurrentUICulture.TextInfo.ToTitleCase( name[ i ] );
+                  coll.Add( tc );
+               }
+               o.SelectedIndex = 0;
+            }
+            finally
+            {
+               coll.EndUpdate( );
+            }
+         }
+         return lci;
+      }
+
+      private LayoutControlItem createDescriptionLayoutControlItem( LayoutControlGroup lg )
+      {
+         LayoutControlItem lci = lg.AddItem( );
+         lci.Name = "lciDescription";
+         lci.Text = "Description";
+         lci.TextLocation = DevExpress.Utils.Locations.Top;
+         MemoEdit o = (MemoEdit) (lci.Control = new MemoEdit( ));
+         return lci;
+      }
+
+      private LayoutControlItem createSuperToolTipHeaderLayoutControlItem( LayoutControlGroup lg )
+      {
+         LayoutControlItem lci = lg.AddItem( );
+         lci.Name = "lciHeader";
+         lci.Text = "Header";
+         lci.TextLocation = DevExpress.Utils.Locations.Top;
+         MemoEdit o = (MemoEdit) (lci.Control = new MemoEdit( ));
+         return lci;
+      }
+
+      private LayoutControlItem createSuperToolTipContentLayoutControlItems( LayoutControlGroup lg )
+      {
+         LayoutControlItem lci = lg.AddItem( );
+         lci.Name = "lciContents";
+         lci.Text = "Contents";
+         lci.TextLocation = DevExpress.Utils.Locations.Top;
+         MemoEdit o = (MemoEdit) (lci.Control = new MemoEdit( ));
+         return lci;
+      }
+      private LayoutControlItem createSuperToolTipFooterLayoutControlItem( LayoutControlGroup lg )
+      {
+         LayoutControlItem lci = lg.AddItem( );
+         lci.Name = "lciFooter";
+         lci.Text = "Footer";
+         lci.TextLocation = DevExpress.Utils.Locations.Top;
+         MemoEdit o = (MemoEdit) (lci.Control = new MemoEdit( ));
+         return lci;
+      }
+
+      private LayoutControlItem createPasswordLayoutControlItem( LayoutControlGroup lg )
+      {
+         LayoutControlItem lci = lg.AddItem( );
+         lci.Name = "lciPassword";
+         lci.Text = "Password";
+         //lci.Control = new TextEdit( );
+         //((TextEdit)lci.Control).Properties.PasswordChar = '*';
+         ButtonEdit o = new ButtonEdit( );
+         {
+            lci.Control = o;
+            o.Properties.PasswordChar = '*';
+            o.Properties.Buttons[ 0 ].Kind = DevExpress.XtraEditors.Controls.ButtonPredefines.Ellipsis;
+            o.Properties.ButtonPressed += this.passwordButtonEdit_ButtonPressed;
+         }
+         return lci;
+      }
+
+      private void passwordButtonEdit_ButtonPressed( object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e )
+      {
+         ButtonEdit o = (ButtonEdit) sender;
+         o.Properties.PasswordChar = o.Properties.PasswordChar == '\0' ? '*' : '\0';
+      }
+
+      private LayoutControlItem createLoginIDLayoutControlItem( LayoutControlGroup lg )
+      {
+         LayoutControlItem lci = lg.AddItem( );
+         lci.Name = "lciLoginID";
+         lci.Text = "Login ID";
+         lci.Control = new TextEdit( );
+         return lci;
+      }
+
+      private static LayoutControlItem createConnectionStringLayoutControlItem( LayoutControlGroup lg )
+      {
+         LayoutControlItem lci = lg.AddItem( );
+         lci.Name = "lciConnectionString";
+         lci.Text = "Connection String";
+         lci.Control = new TextEdit( );
+         return lci;
+      }
+
+      /////////////////////////////////////////////////////////////////////////////////////////////////////
 
       private void f()
       {
@@ -35,10 +248,9 @@ namespace LayoutItemsForm
       private void x()
       {
          LayoutControl lc = this.layoutControl1; // new LayoutControl( );
-         LayoutControlGroup rg = lc.Root;
+         LayoutControlGroup rg = Form1.configRootGroup( lc, "Root Group" );
          {
             lc.Dock = System.Windows.Forms.DockStyle.Fill;
-            Form1.configRootGroup( rg );
 
             LayoutControlItem item1 = rg.AddItem( );
             {
@@ -72,15 +284,15 @@ namespace LayoutItemsForm
             }
          }
       }
-
-      private static void configRootGroup( LayoutControlGroup rg )
+      private static LayoutControlGroup configRootGroup( LayoutControl lc, string titleText )
       {
+         LayoutControlGroup rg = lc.Root;
          //
          // rg.AllowHide = false;
          // rg.AllowCustomizeChildren = false;
          //
          rg.GroupBordersVisible = true;
-         rg.Text = "Root Group";
+         rg.Text = titleText;
          rg.TextLocation = DevExpress.Utils.Locations.Top;
          rg.TextVisible = true;
          //
@@ -98,6 +310,8 @@ namespace LayoutItemsForm
          // rg.CaptionImage = null;
          // rg.Images = null;
          // rg.CaptionImageIndex = -1;
+         //
+         return rg;
       }
    }
 }

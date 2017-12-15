@@ -95,17 +95,17 @@
          this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
          this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
          this.barDockControlTop.Manager = this.barManager1;
-         this.barDockControlTop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-         this.barDockControlTop.Size = new System.Drawing.Size(948, 54);
+         this.barDockControlTop.Margin = new System.Windows.Forms.Padding(4);
+         this.barDockControlTop.Size = new System.Drawing.Size(981, 54);
          // 
          // barDockControlBottom
          // 
          this.barDockControlBottom.CausesValidation = false;
          this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-         this.barDockControlBottom.Location = new System.Drawing.Point(0, 380);
+         this.barDockControlBottom.Location = new System.Drawing.Point(0, 632);
          this.barDockControlBottom.Manager = this.barManager1;
-         this.barDockControlBottom.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-         this.barDockControlBottom.Size = new System.Drawing.Size(948, 26);
+         this.barDockControlBottom.Margin = new System.Windows.Forms.Padding(4);
+         this.barDockControlBottom.Size = new System.Drawing.Size(981, 26);
          // 
          // barDockControlLeft
          // 
@@ -113,17 +113,17 @@
          this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
          this.barDockControlLeft.Location = new System.Drawing.Point(0, 54);
          this.barDockControlLeft.Manager = this.barManager1;
-         this.barDockControlLeft.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-         this.barDockControlLeft.Size = new System.Drawing.Size(0, 326);
+         this.barDockControlLeft.Margin = new System.Windows.Forms.Padding(4);
+         this.barDockControlLeft.Size = new System.Drawing.Size(0, 578);
          // 
          // barDockControlRight
          // 
          this.barDockControlRight.CausesValidation = false;
          this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-         this.barDockControlRight.Location = new System.Drawing.Point(948, 54);
+         this.barDockControlRight.Location = new System.Drawing.Point(981, 54);
          this.barDockControlRight.Manager = this.barManager1;
-         this.barDockControlRight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-         this.barDockControlRight.Size = new System.Drawing.Size(0, 326);
+         this.barDockControlRight.Margin = new System.Windows.Forms.Padding(4);
+         this.barDockControlRight.Size = new System.Drawing.Size(0, 578);
          // 
          // layoutControl1
          // 
@@ -131,7 +131,7 @@
          this.layoutControl1.Location = new System.Drawing.Point(0, 54);
          this.layoutControl1.Name = "layoutControl1";
          this.layoutControl1.Root = this.layoutControlGroup1;
-         this.layoutControl1.Size = new System.Drawing.Size(948, 326);
+         this.layoutControl1.Size = new System.Drawing.Size(981, 578);
          this.layoutControl1.TabIndex = 4;
          this.layoutControl1.Text = "layoutControl1";
          // 
@@ -141,20 +141,20 @@
          this.layoutControlGroup1.GroupBordersVisible = false;
          this.layoutControlGroup1.Name = "layoutControlGroup1";
          this.layoutControlGroup1.OptionsItemText.TextToControlDistance = 5;
-         this.layoutControlGroup1.Size = new System.Drawing.Size(948, 326);
+         this.layoutControlGroup1.Size = new System.Drawing.Size(981, 578);
          this.layoutControlGroup1.TextVisible = false;
          // 
          // Form1
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(948, 406);
+         this.ClientSize = new System.Drawing.Size(981, 658);
          this.Controls.Add(this.layoutControl1);
          this.Controls.Add(this.barDockControlLeft);
          this.Controls.Add(this.barDockControlRight);
          this.Controls.Add(this.barDockControlBottom);
          this.Controls.Add(this.barDockControlTop);
-         this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+         this.Margin = new System.Windows.Forms.Padding(4);
          this.Name = "Form1";
          this.Text = "Form1";
          ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
