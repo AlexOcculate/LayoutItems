@@ -5,12 +5,17 @@ using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraLayout;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Forms;
 
 namespace LayoutItemsForm
 {
    public partial class Form1 : DevExpress.XtraEditors.XtraForm
    {
+      private System.Windows.Forms.BindingSource bindingSource1;
+      private List<Props> dataSource;
+
       public Form1()
       {
          InitializeComponent( );
@@ -20,16 +25,39 @@ namespace LayoutItemsForm
 
       private void create()
       {
+         this.FormClosing += this.Form1_FormClosing;
+         this.bindingSource1 = new BindingSource( this.components );
+         this.dataSource = new List<Props>( )
+         {
+            new Props("prop0", "value0"),
+            new Props("prop1", "value1"),
+            new Props("prop2", "value2"),
+            new Props("prop3", "value3"),
+            new Props("prop0", "value0"),
+            new Props("prop1", "value1"),
+            new Props("prop2", "value2"),
+            new Props("prop3", "value3"),
+         };
+         //
+         this.SuspendLayout( );
          ((System.ComponentModel.ISupportInitialize) (this.layoutControl1)).BeginInit( );
          ((System.ComponentModel.ISupportInitialize) (this.layoutControlGroup1)).BeginInit( );
-         this.SuspendLayout( );
+         ((System.ComponentModel.ISupportInitialize) (this.bindingSource1)).BeginInit( );
          {
+            this.bindingSource1.DataSource = typeof( Props );
+            this.bindingSource1.Add( this.dataSource );
             this.createLayoutControl( );
          }
+         ((System.ComponentModel.ISupportInitialize) (this.bindingSource1)).EndInit( );
          ((System.ComponentModel.ISupportInitialize) (this.layoutControl1)).EndInit( );
          ((System.ComponentModel.ISupportInitialize) (this.layoutControlGroup1)).EndInit( );
          this.ResumeLayout( false );
          this.PerformLayout( );
+      }
+
+      private void Form1_FormClosing( object sender, FormClosingEventArgs e )
+      {
+         var count = this.dataSource.Count;
       }
 
       private void createLayoutControl()
@@ -56,7 +84,7 @@ namespace LayoutItemsForm
                   createConnectionStringLayoutControlItem( lg1 );
                   createLoginIDLayoutControlItem( lg1 );
                   createPasswordLayoutControlItem( lg1 );
-                  createConnectionPropertiesLayoutControlItem( lg1 );
+                  createConnectionPropertiesLayoutControlItem( lg1, this.bindingSource1 );
                }
                LayoutControlGroup lg2 = tg.AddTabPage( "Provider" ) as LayoutControlGroup;
                {
@@ -152,7 +180,6 @@ namespace LayoutItemsForm
          }
          return lci;
       }
-
       private LayoutControlItem createDescriptionLayoutControlItem( LayoutControlGroup lg )
       {
          LayoutControlItem lci = lg.AddItem( );
@@ -162,7 +189,6 @@ namespace LayoutItemsForm
          MemoEdit o = (MemoEdit) (lci.Control = new MemoEdit( ));
          return lci;
       }
-
       private LayoutControlItem createSuperToolTipHeaderLayoutControlItem( LayoutControlGroup lg )
       {
          LayoutControlItem lci = lg.AddItem( );
@@ -172,7 +198,6 @@ namespace LayoutItemsForm
          MemoEdit o = (MemoEdit) (lci.Control = new MemoEdit( ));
          return lci;
       }
-
       private LayoutControlItem createSuperToolTipContentLayoutControlItems( LayoutControlGroup lg )
       {
          LayoutControlItem lci = lg.AddItem( );
@@ -191,7 +216,6 @@ namespace LayoutItemsForm
          MemoEdit o = (MemoEdit) (lci.Control = new MemoEdit( ));
          return lci;
       }
-
       private LayoutControlItem createPasswordLayoutControlItem( LayoutControlGroup lg )
       {
          LayoutControlItem lci = lg.AddItem( );
@@ -208,13 +232,11 @@ namespace LayoutItemsForm
          }
          return lci;
       }
-
       private void passwordButtonEdit_ButtonPressed( object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e )
       {
          ButtonEdit o = (ButtonEdit) sender;
          o.Properties.PasswordChar = o.Properties.PasswordChar == '\0' ? '*' : '\0';
       }
-
       private LayoutControlItem createLoginIDLayoutControlItem( LayoutControlGroup lg )
       {
          LayoutControlItem lci = lg.AddItem( );
@@ -223,7 +245,6 @@ namespace LayoutItemsForm
          lci.Control = new TextEdit( );
          return lci;
       }
-
       private static LayoutControlItem createConnectionStringLayoutControlItem( LayoutControlGroup lg )
       {
          LayoutControlItem lci = lg.AddItem( );
@@ -233,18 +254,30 @@ namespace LayoutItemsForm
          return lci;
       }
 
-      private static LayoutControlItem createConnectionPropertiesLayoutControlItem( LayoutControlGroup lg )
+      private static LayoutControlItem createConnectionPropertiesLayoutControlItem( LayoutControlGroup lg, BindingSource bs )
       {
          LayoutControlItem lci = lg.AddItem( );
          lci.Name = "lciConnectionProperties";
          lci.Text = "Connection Properties";
          lci.TextLocation = DevExpress.Utils.Locations.Top;
          GridControl gc = new GridControl( );
+         {
+            gc.DataSource = bs;
+            gc.UseEmbeddedNavigator = true;
+            gc.ForceInitialize( );
+            gc.RefreshDataSource( );
+            GridView gv = gc.MainView as GridView;
+            {
+               gv.NewItemRowText = "New Row";
+               //gv.OptionsView.NewItemRowPosition = NewItemRowPosition.Top;
+               //gv.InitNewRow += new InitNewRowEventHandler( this.gridView1_InitNewRow );
+               gv.OptionsView.ShowFooter = true;
+               gv.OptionsBehavior.Editable = true;
+               gv.OptionsBehavior.ReadOnly = false;
+            }
+         }
          lci.Control = gc;
-         gc.ForceInitialize( );
-         GridView gv = gc.MainView as GridView;
-         gv.NewItemRowText = "New Row";
-         gv.OptionsView.
+         //gv.OptionsView.
          return lci;
       }
 
@@ -332,4 +365,29 @@ namespace LayoutItemsForm
          return rg;
       }
    }
+
+   ////////////////////////////////////////////////////////////////
+   [Serializable( )]
+   public class Props
+   {
+      [Display( Name = "Key:" )]
+      [StringLength( 100, MinimumLength = 1 )]
+      public string Key { get; set; }
+      [Display( Name = "Value:" )]
+      [StringLength( 100, MinimumLength = 1 )]
+      public string Value { get; set; }
+      [Display( Name = "Active?" )]
+      public bool IsActive { get; set; }
+
+      public Props()
+      {
+      }
+
+      public Props( string key, string value )
+      {
+         this.Key = key ?? throw new ArgumentNullException( nameof( key ) );
+         this.Value = value ?? throw new ArgumentNullException( nameof( value ) );
+      }
+   }
+
 }
